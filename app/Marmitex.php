@@ -8,6 +8,8 @@ class Marmitex extends Model
 {
 	protected $table = 'marmitex';
 
+	protected $fillable = ['material','nome','tamanho','marca','valor_unitario'];
+
 	public function carnes(){
 		return $this->hasMany('App\Carnes','id');
 	}

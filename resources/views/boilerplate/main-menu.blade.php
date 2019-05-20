@@ -37,7 +37,22 @@
 @php
     $class = '';
 
-    if ($controller == 'UsersController') {
+    if ($controller == 'ClientesController') {
+        $class = 'active';
+    }
+@endphp
+
+<li class="nav-item">
+    <a href="{{ route('clientes.index') }}" class="nav-link {{ $class }}">
+        <i class="nav-icon fa fa-users"></i>
+        <p>Clientes</p>
+    </a>
+</li>
+
+@php
+    $class = '';
+
+    if ($controller == 'UsersController' || $controller == 'BairrosController' || $controller = 'MarmitexController') {
         $class = 'menu-open';
     }
 @endphp
@@ -49,6 +64,37 @@
     </a>
     
     <ul class="nav nav-treeview">
+
+        @php
+            $class = '';
+
+            if ($controller == 'BairrosController') {
+                $class = 'active';
+            }
+        @endphp
+
+        <li class="nav-item">
+            <a href="{{ route('bairros.index') }}" class="nav-link {{ $class }}">
+                <i class="nav-icon fa fa-road"></i>
+                <p>Bairros</p>
+            </a>
+        </li>
+
+        @php
+            $class = '';
+
+            if ($controller == 'MarmitexController') {
+                $class = 'active';
+            }
+        @endphp
+
+        <li class="nav-item">
+            <a href="{{ route('marmitas.index') }}" class="nav-link {{ $class }}">
+                <i class="nav-icon fa fa"></i>
+                <p>Marmitex</p>
+            </a>
+        </li>
+
         @can('index', \App\User::class)    
             @php
                 $class = '';

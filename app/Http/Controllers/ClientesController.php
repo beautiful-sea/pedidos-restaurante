@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Clientes;
+use App\Enderecos;
+use DB;
 use Illuminate\Http\Request;
 
 class ClientesController extends Controller
@@ -14,7 +16,11 @@ class ClientesController extends Controller
      */
     public function index()
     {
-        //
+        $clientes = Clientes::all();
+
+        return view('clientes.index',[
+            'clientes'=>$clientes
+        ]);
     }
 
     /**
@@ -24,7 +30,11 @@ class ClientesController extends Controller
      */
     public function create()
     {
-        //
+        $cliente = new Clientes;
+
+        return view('clientes.create',[
+            'cliente'=>$cliente
+        ]);
     }
 
     /**
@@ -35,7 +45,21 @@ class ClientesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $cliente = new Clientes;
+        $cliente->fill($request->all());
+
+        $endereco = new Enderecos;
+        $endereco->fill($request->all());
+
+
+        DB::transaction(function() use ($cliente, $endereco) {
+            $c = $cliente->save();
+            $cliente->endereco()->save($endereco);
+        });
+
+        return redirect()->route('clientes.index');
+
     }
 
     /**
@@ -55,9 +79,12 @@ class ClientesController extends Controller
      * @param  \App\Clientes  $clientes
      * @return \Illuminate\Http\Response
      */
-    public function edit(Clientes $clientes)
+    public function edit(Clientes $cliente)
     {
-        //
+
+        return view('clientes.edit',[
+            'cliente'=>$cliente
+        ]);
     }
 
     /**
@@ -67,9 +94,21 @@ class ClientesController extends Controller
      * @param  \App\Clientes  $clientes
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Clientes $clientes)
+    public function update(Request $request, Clientes $clientes,$id)
     {
-        //
+        $cliente = Clientes::find($id);
+        $cliente->fill($request->all());
+
+        $endereco = new Enderecos;
+        $endereco->fill($request->all());
+
+
+        DB::transaction(function() use ($cliente, $endereco) {
+            $cliente->save();
+            $cliente->endereco()->update($endereco->attributesToArray());
+        });
+
+        return redirect()->route('clientes.index');
     }
 
     /**
@@ -78,8 +117,14 @@ class ClientesController extends Controller
      * @param  \App\Clientes  $clientes
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Clientes $clientes)
+    public function destroy(Clientes $clientes,$id)
     {
-        //
+        $this->authorize('destroy', $clientes);
+
+        $cliente = $clientes->find($id);
+        $cliente->endereco()->delete();
+        $cliente->delete();
+
+        return redirect()->route('clientes.index')->with('flash.success', 'Cliente excluído com sucesso');
     }
 }

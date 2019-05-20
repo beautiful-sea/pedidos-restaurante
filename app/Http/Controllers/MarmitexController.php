@@ -14,7 +14,11 @@ class MarmitexController extends Controller
      */
     public function index()
     {
-        //
+        $marmitas = Marmitex::all();
+
+        return view('marmitas.index',[
+            'marmitas'=>$marmitas
+        ]);
     }
 
     /**
@@ -24,7 +28,11 @@ class MarmitexController extends Controller
      */
     public function create()
     {
-        //
+        $marmitas = new Marmitex;
+
+        return view('marmitas.create',[
+            'marmitas'=>$marmitas
+        ]);
     }
 
     /**
@@ -35,7 +43,14 @@ class MarmitexController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $marmita = new Marmitex;
+
+        $marmita->fill($request->all());
+
+        $marmita->save();
+
+        return redirect()->route('marmitas.index')->with('flash.success', 'Marmitex criado com sucesso');
+
     }
 
     /**
@@ -55,9 +70,13 @@ class MarmitexController extends Controller
      * @param  \App\Marmitex  $marmitex
      * @return \Illuminate\Http\Response
      */
-    public function edit(Marmitex $marmitex)
+    public function edit(Marmitex $marmitex,$id)
     {
-        //
+        $marmitas = Marmitex::find($id);
+
+        return view('marmitas.create',[
+            'marmitas'=>$marmitas
+        ]);  
     }
 
     /**
@@ -67,9 +86,11 @@ class MarmitexController extends Controller
      * @param  \App\Marmitex  $marmitex
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Marmitex $marmitex)
+    public function update(Request $request, Marmitex $marmitex,$id)
     {
-        //
+        $marmitas = Marmitex::find($id);
+
+        $marmitas->fill($request->all());
     }
 
     /**

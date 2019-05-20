@@ -17,9 +17,23 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['prefix'=>'pedidos'],function(){
-	Route::get('/', 'PedidosController@index')->name('pedidos');
-	Route::get('/create', 'PedidosController@index')->name('pedidos.create');
+
+});
+
+Route::group(['prefix'=>'clientes'],function(){
+
+});
+
+Route::group(['prefix'=>'bairros'],function(){
+
+});
+
+Route::group(['prefix'=>'marmitas'],function(){
 });
 
 route::resource('/pedidos','PedidosController');
+route::resource('/clientes','ClientesController');
+route::resource('/bairros','BairrosController');
+route::resource('/marmitas','MarmitexController');
+
 \AgenciaMaior\LaravelBoilerplate\LaravelBoilerplateServiceProvider::routes();

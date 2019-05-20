@@ -14,7 +14,10 @@ class Bairroscontroller extends Controller
      */
     public function index()
     {
-        //
+        $bairros = Bairros::all();
+        return view('bairros.index',[
+            'bairros'   =>  $bairros
+        ]);
     }
 
     /**
@@ -24,7 +27,10 @@ class Bairroscontroller extends Controller
      */
     public function create()
     {
-        //
+        $bairro = new Bairros;
+        return view('bairros.create',[
+            'bairro'=>$bairro
+        ]);
     }
 
     /**
@@ -35,7 +41,13 @@ class Bairroscontroller extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $bairro = new Bairros;
+
+        $bairro->fill($request->all());
+
+        $bairro->save();
+
+        return redirect()->route('bairros.index')->with('flash.success', 'Bairro criado com sucesso');
     }
 
     /**
@@ -55,9 +67,13 @@ class Bairroscontroller extends Controller
      * @param  \App\Bairros  $bairros
      * @return \Illuminate\Http\Response
      */
-    public function edit(Bairros $bairros)
+    public function edit(Bairros $bairros,$id)
     {
-        //
+        $bairro = $bairros::find($id);
+
+        return view('bairros.edit',[
+            'bairro'=>$bairro
+        ]);
     }
 
     /**
@@ -67,9 +83,15 @@ class Bairroscontroller extends Controller
      * @param  \App\Bairros  $bairros
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Bairros $bairros)
+    public function update(Request $request, Bairros $bairros,$id)
     {
-        //
+        $bairro = $bairros->find($id);
+
+        $bairro->fill($request->all());
+
+        $bairro->save();
+
+        return redirect()->route('bairros.index')->with('flash.success', 'Bairro editado com sucesso');;
     }
 
     /**
@@ -78,8 +100,11 @@ class Bairroscontroller extends Controller
      * @param  \App\Bairros  $bairros
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Bairros $bairros)
+    public function destroy(Bairros $bairros,$id)
     {
-        //
+        $bairros->find($id)->delete();
+
+        return redirect()->route('bairros.index')->with('flash.success', 'Bairro deletado com sucesso');;
+
     }
 }
