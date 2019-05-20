@@ -74,7 +74,7 @@ class MarmitexController extends Controller
     {
         $marmitas = Marmitex::find($id);
 
-        return view('marmitas.create',[
+        return view('marmitas.edit',[
             'marmitas'=>$marmitas
         ]);  
     }
@@ -91,6 +91,11 @@ class MarmitexController extends Controller
         $marmitas = Marmitex::find($id);
 
         $marmitas->fill($request->all());
+
+        $marmitas->save();
+
+        return redirect()->route('marmitas.index')->with('flash.success', 'Marmitex editado com sucesso');
+
     }
 
     /**
@@ -99,8 +104,13 @@ class MarmitexController extends Controller
      * @param  \App\Marmitex  $marmitex
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Marmitex $marmitex)
+    public function destroy(Marmitex $marmitex,$id)
     {
-        //
+        $marmita = $marmitex->find($id);
+
+        $marmita->delete();
+
+        return redirect()->route('marmitas.index')->with('flash.success', 'Marmitex deletado com sucesso');
+
     }
 }

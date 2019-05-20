@@ -35,5 +35,6 @@ route::resource('/pedidos','PedidosController');
 route::resource('/clientes','ClientesController');
 route::resource('/bairros','BairrosController');
 route::resource('/marmitas','MarmitexController');
+route::resource('/cardapios','CardapiosController');
 
 \AgenciaMaior\LaravelBoilerplate\LaravelBoilerplateServiceProvider::routes();

@@ -14,7 +14,11 @@ class Cardapioscontroller extends Controller
      */
     public function index()
     {
-        //
+        $cardapios = Cardapios::all();
+
+        return view('cardapios.index',[
+            'cardapios' =>  $cardapios
+        ]);
     }
 
     /**
@@ -24,7 +28,11 @@ class Cardapioscontroller extends Controller
      */
     public function create()
     {
-        //
+        $cardapio = new Cardapios;
+
+        return view('cardapios.create',[
+            'cardapio' =>  $cardapio
+        ]);
     }
 
     /**
@@ -35,7 +43,14 @@ class Cardapioscontroller extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $cardapio = new Cardapios;
+
+        $cardapio->fill($request->all());
+
+        $cardapio->save();
+
+        return redirect()->route('cardapios.index')->with('flash.success', 'Alimento criado com sucesso');
+
     }
 
     /**
@@ -55,9 +70,13 @@ class Cardapioscontroller extends Controller
      * @param  \App\Cardapios  $cardapios
      * @return \Illuminate\Http\Response
      */
-    public function edit(Cardapios $cardapios)
+    public function edit(Cardapios $cardapios,$id)
     {
-        //
+        $cardapio = Cardapios::find($id);
+
+        return view('cardapios.edit',[
+            'cardapio' =>  $cardapio
+        ]);
     }
 
     /**
@@ -67,9 +86,14 @@ class Cardapioscontroller extends Controller
      * @param  \App\Cardapios  $cardapios
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Cardapios $cardapios)
+    public function update(Request $request, Cardapios $cardapios,$id)
     {
-        //
+        $cardapio = Cardapios::find($id);
+        $cardapio->fill($request->all());
+        $cardapio->save();
+
+        return redirect()->route('cardapios.index')->with('flash.success', 'Alimento editado com sucesso');
+
     }
 
     /**

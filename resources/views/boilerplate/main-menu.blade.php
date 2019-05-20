@@ -52,7 +52,7 @@
 @php
     $class = '';
 
-    if ($controller == 'UsersController' || $controller == 'BairrosController' || $controller = 'MarmitexController') {
+    if (($controller == 'UsersController') || ($controller == 'BairrosController') || ($controller == 'MarmitexController') || ($controller == 'CardapiosController')) {
         $class = 'menu-open';
     }
 @endphp
@@ -80,18 +80,19 @@
             </a>
         </li>
 
+
         @php
             $class = '';
 
-            if ($controller == 'MarmitexController') {
+            if ($controller == 'CardapiosController') {
                 $class = 'active';
             }
         @endphp
 
         <li class="nav-item">
-            <a href="{{ route('marmitas.index') }}" class="nav-link {{ $class }}">
+            <a href="{{ route('cardapios.index') }}" class="nav-link {{ $class }}">
                 <i class="nav-icon fa fa"></i>
-                <p>Marmitex</p>
+                <p>Cardapios</p>
             </a>
         </li>
 

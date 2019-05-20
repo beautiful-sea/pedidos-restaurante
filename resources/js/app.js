@@ -3,10 +3,13 @@
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
+import Vuex from 'vuex'
 
 require('./bootstrap');
 
 window.Vue = require('vue');
+
+Vue.use(Vuex);
 
 /**
  * The following block of code may be used to automatically register your
@@ -22,6 +25,7 @@ window.Vue = require('vue');
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('pedido-cliente', require('./components/PedidoCliente.vue').default);
 Vue.component('pedido', require('./components/Pedido.vue').default);
+Vue.component('marmita', require('./components/Marmita.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

@@ -22,6 +22,7 @@
             <thead>
                 <tr>
                     <th>Nome</th>
+                    <th>Celular</th>
                     <th>Bairro</th>
                     <th data-orderable="false"></th>
                 </tr>
@@ -36,6 +37,8 @@
 
            <tr class="{{ $class }}">
             <td>{{ $u->nome }}</td>
+            <td>{{ isset($u->celular)?$u->celular:'Não cadastrado' }}</td>
+            
             <td>{{ isset($u->endereco->bairro)?$u->endereco->bairro->nome:'Não cadastrado' }}</td>
             <td>
                 <div class="table-actions">
