@@ -33,6 +33,12 @@ Vue.component('marmita', require('./components/Marmita.vue').default);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+const store = new Vuex.Store({
+    state: {
+    }
+});
+
 const app = new Vue({
     el: '#app',
+    store
 });

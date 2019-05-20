@@ -14,7 +14,11 @@ class CarnesController extends Controller
      */
     public function index()
     {
-        //
+        $carnes = Carnes::all();
+
+        return view('carnes.index',[
+            'carnes'    =>  $carnes
+        ]);
     }
 
     /**
@@ -24,7 +28,11 @@ class CarnesController extends Controller
      */
     public function create()
     {
-        //
+        $carne = new Carnes;
+
+        return view('carnes.create',[
+            'carne'    =>  $carne
+        ]);
     }
 
     /**
@@ -35,7 +43,14 @@ class CarnesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $carne = new Carnes;
+        
+        $request['valor_unitario'] = $this->parseCurrency($request->valor_unitario);
+
+        $carne->fill($request->all());
+        $carne->save();
+
+        return redirect()->route('carnes.index')->with('flash.success','Carne adicionada com sucesso.');
     }
 
     /**
@@ -55,9 +70,13 @@ class CarnesController extends Controller
      * @param  \App\Carnes  $carnes
      * @return \Illuminate\Http\Response
      */
-    public function edit(Carnes $carnes)
+    public function edit(Carnes $carnes,$id)
     {
-        //
+        $carne = Carnes::find($id);
+
+        return view('carnes.edit',[
+            'carne'    =>  $carne
+        ]);
     }
 
     /**
@@ -67,9 +86,14 @@ class CarnesController extends Controller
      * @param  \App\Carnes  $carnes
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Carnes $carnes)
+    public function update(Request $request, Carnes $carnes,$id)
     {
-        //
+        $carne = Carnes::find($id);
+        $request['valor_unitario'] = $this->parseCurrency($request->valor_unitario);
+        $carne->fill($request->all());
+        $carne->save();
+
+        return redirect()->route('carnes.index')->with('flash.success','Carne editada com sucesso.');
     }
 
     /**
@@ -78,8 +102,12 @@ class CarnesController extends Controller
      * @param  \App\Carnes  $carnes
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Carnes $carnes)
+    public function destroy(Carnes $carnes,$id)
     {
-        //
+        $carne = Carnes::find($id);
+        $carne->delete();
+
+        return redirect()->route('carnes.index')->with('flash.success','Carne excluída com sucesso.');
+
     }
 }

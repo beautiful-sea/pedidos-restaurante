@@ -128708,8 +128708,12 @@ Vue.component('marmita', __webpack_require__(/*! ./components/Marmita.vue */ "./
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
+  state: {}
+});
 var app = new Vue({
-  el: '#app'
+  el: '#app',
+  store: store
 });
 
 /***/ }),

@@ -52,7 +52,7 @@
 @php
     $class = '';
 
-    if (($controller == 'UsersController') || ($controller == 'BairrosController') || ($controller == 'MarmitexController') || ($controller == 'CardapiosController')) {
+    if (($controller == 'UsersController') || ($controller == 'BairrosController') || ($controller == 'MarmitexController') || ($controller == 'CardapiosController') || ($controller == 'CarnesController')) {
         $class = 'menu-open';
     }
 @endphp
@@ -91,8 +91,23 @@
 
         <li class="nav-item">
             <a href="{{ route('cardapios.index') }}" class="nav-link {{ $class }}">
-                <i class="nav-icon fa fa"></i>
+                <i class="nav-icon fa fa-utensils"></i>
                 <p>Cardapios</p>
+            </a>
+        </li>
+
+        @php
+            $class = '';
+
+            if ($controller == 'CarnesController') {
+                $class = 'active';
+            }
+        @endphp
+
+        <li class="nav-item">
+            <a href="{{ route('carnes.index') }}" class="nav-link {{ $class }}">
+                <i class="nav-icon fa fa-drumstick-bite"></i>
+                <p>Carnes</p>
             </a>
         </li>
 
