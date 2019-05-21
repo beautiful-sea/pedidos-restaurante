@@ -1847,8 +1847,35 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-/* harmony default export */ __webpack_exports__["default"] = ({});
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['marmita', 'cardapios', 'carnes', 'chave'],
+  data: function data() {
+    return {
+      cardapio: this.cardapios,
+      selectedCardapio: []
+    };
+  },
+  methods: {
+    addMarmitex: function addMarmitex() {
+      this.$emit('new', this.marmita);
+    }
+  },
+  mounted: function mounted() {
+    $('.select-cardapio').select2({
+      theme: 'classic'
+    });
+    $('.select-carnes').select2({
+      theme: 'classic'
+    });
+  },
+  created: function created() {
+    for (var i = this.cardapios.length - 1; i >= 0; i--) {
+      if (this.cardapio[i].selected == 1) {
+        this.selectedCardapio.push(this.cardapio[i]);
+      }
+    }
+  }
+});
 
 /***/ }),
 
@@ -1886,33 +1913,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    carnes: Array,
-    cardapios: Array,
+    carn: Array,
+    cardap: Array,
     marmitexs: Array
   },
   data: function data() {
     return {
-      marmita: []
+      marmita: ''
     };
   },
   methods: {
-    addMarmitex: function addMarmitex() {}
-  },
-  mounted: function mounted() {},
-  updated: function updated() {
-    var vm = this;
-
-    for (var i = this.marmitex.length - 1; i >= 0; i--) {
-      $('#select-cardapio' + [i]).select2({
-        theme: 'classic'
-      });
-      $('#select-carnes' + [i]).select2({
-        theme: 'classic'
-      });
+    addMarmitex: function addMarmitex() {
+      this.$emit('new', this.marmita);
     }
-  }
+  },
+  mounted: function mounted() {}
 });
 
 /***/ }),
@@ -1985,23 +2003,38 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: {
-    clientes: Array
-  },
+  props: ['bairros', 'clientes'],
   data: function data() {
     return {
       cliente: {
+        id: '',
         endereco: {
-          bairro: {}
+          logradouro: '',
+          numero: '',
+          bairro: {
+            id: '',
+            nome: ''
+          },
+          referencia: '',
+          complemento: ''
         }
       }
     };
   },
+  watch: {
+    cliente: {
+      handler: function handler(val, oldVal) {
+        this.$emit('setcliente', val);
+      },
+      deep: true
+    }
+  },
   methods: {
     setCliente: function setCliente() {
       var cliente_id = $('#select-cliente').val();
-      console.log(cliente_id);
       var cliente = this.clientes.find(function (item) {
         return item.id == cliente_id;
       });
@@ -2025,6 +2058,112 @@ __webpack_require__.r(__webpack_exports__);
     }).trigger('change').on('change', function () {
       vm.setCliente();
     });
+  },
+  updated: function updated() {
+    $('#select-bairro').select2({
+      theme: 'classic'
+    });
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/PedidoComponent.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/PedidoComponent.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['clientes', 'carnes', 'cardapios', 'marmitexs', 'bairros'],
+  data: function data() {
+    return {
+      marmitas: [],
+      cliente: {
+        id: '',
+        endereco: {
+          logradouro: '',
+          numero: '',
+          bairro: {
+            id: '',
+            nome: ''
+          },
+          referencia: '',
+          complemento: ''
+        }
+      }
+    };
+  },
+  methods: {
+    addMarmita: function addMarmita(marmita) {
+      this.marmitas.push(marmita);
+    },
+    setCliente: function setCliente(cliente) {
+      this.cliente = cliente;
+      console.log(this.cliente);
+    },
+    salvarPedido: function salvarPedido() {
+      var marmitas = this.marmitas;
+      var cliente = this.cliente;
+      axios({
+        method: 'post',
+        // verbo http
+        url: '/pedidos',
+        // url
+        data: {
+          marmitas: marmitas,
+          cliente: cliente
+        }
+      }).then(function (response) {
+        console.log(response);
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    }
+  },
+  watch: {
+    marmitas: function marmitas(val) {
+      this.$store.commit('addMarmita', val);
+    }
+  },
+  computed: {
+    marmitasOrdenadas: function marmitasOrdenadas() {
+      return _.orderBy(this.marmitas, 'id');
+    }
+  },
+  mounted: function mounted() {},
+  updated: function updated() {
+    var vm = this;
+
+    for (var i = this.marmitas.length - 1; i >= 0; i--) {
+      $('.select-cardapio' + [i]).select2({
+        theme: 'classic'
+      });
+      $('.select-carnes' + [i]).select2({
+        theme: 'classic'
+      });
+    }
   }
 });
 
@@ -115068,81 +115207,94 @@ var render = function() {
   return _c("div", { staticClass: "row" }, [
     _c("div", { staticClass: "col-md-8" }, [
       _c("div", { staticClass: "card" }, [
-        _vm._m(0),
+        _c("div", { staticClass: "card-header" }, [
+          _c("div", { staticClass: "form-group" }, [
+            _c("h4", [_vm._v("Marmita " + _vm._s(_vm.chave + 1))]),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-success",
+                staticStyle: { float: "right" },
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    return _vm.addMarmitex()
+                  }
+                }
+              },
+              [_vm._v("Confirmar")]
+            )
+          ])
+        ]),
         _vm._v(" "),
         _c("div", { staticClass: "card-body" }, [
-          _vm._m(1),
+          _c("div", { staticClass: "col-md-12" }, [
+            _c("label", [_vm._v("Cardapio")]),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.selectedCardapio,
+                    expression: "selectedCardapio"
+                  }
+                ],
+                staticClass: " form-control select-2 select-cardapio",
+                attrs: { multiple: "" },
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.selectedCardapio = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  }
+                }
+              },
+              _vm._l(_vm.cardapio, function(c) {
+                return _c("option", { domProps: { value: c } }, [
+                  _vm._v("\n\t\t\t\t\t\t\t" + _vm._s(c.nome) + "\n\t\t\t\t\t\t")
+                ])
+              }),
+              0
+            )
+          ]),
           _vm._v(" "),
-          _c("span", [_vm._v("selecionado:")]),
-          _vm._v(" "),
-          _vm.marmitex
-            ? _c("div", { staticClass: "col-md-6" }, [
-                _c("label", [_vm._v("Carne")]),
-                _vm._v(" "),
-                _vm._m(2)
-              ])
-            : _vm._e()
+          _c("div", { staticClass: "col-md-6" }, [
+            _c("label", [_vm._v("Carne")]),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                staticClass: " form-control select-2 select-carnes",
+                attrs: { name: "carnes[]", multiple: "" }
+              },
+              _vm._l(_vm.carnes, function(carne) {
+                return _c("option", [
+                  _vm._v(
+                    "\n\t\t\t\t\t\t\t" + _vm._s(carne.nome) + "\n\t\t\t\t\t\t"
+                  )
+                ])
+              }),
+              0
+            )
+          ])
         ])
       ])
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-header" }, [
-      _c("div", { staticClass: "form-group" }, [
-        _c("h4", [_vm._v("Marmita ")]),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-success",
-            staticStyle: { float: "right" },
-            attrs: { type: "button" }
-          },
-          [_vm._v("Duplicar")]
-        )
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-12" }, [
-      _c("label", [_vm._v("Cardapio")]),
-      _vm._v(" "),
-      _c(
-        "select",
-        {
-          staticClass: " form-control select-2 select-cardapio",
-          attrs: { name: "cardapio[]", id: "'select-cardapio'", multiple: "" }
-        },
-        [
-          _c("option", {
-            attrs: { selected: "c.default == 0 ? 'selected' : ''" }
-          })
-        ]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "select",
-      {
-        staticClass: " form-control select-2 ",
-        attrs: { name: "carnes[]", multiple: "" }
-      },
-      [_c("option", [_vm._v("\n\t\t\t\t\t\t\tcarne.nome\n\t\t\t\t\t\t")])]
-    )
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -115164,57 +115316,83 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "col-md-6" }, [
-    _c("div", { staticClass: "card" }, [
-      _vm._m(0),
-      _vm._v(" "),
-      _c("div", { staticClass: "card-body" }, [
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-md-8" }, [
-            _c("label", [_vm._v("Adicionar Marmita")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "input-group" }, [
-              _c(
-                "select",
-                {
-                  staticClass: "form-control",
-                  attrs: { id: "select-marmitex" }
-                },
-                _vm._l(_vm.marmitexs, function(ms) {
-                  return _c("option", { domProps: { value: ms.id } }, [
-                    _vm._v(
-                      _vm._s(ms.nome) +
-                        " - " +
-                        _vm._s(ms.material) +
-                        " - R$ " +
-                        _vm._s(ms.valor_unitario) +
-                        ",00"
-                    )
-                  ])
-                }),
-                0
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-success",
-                  attrs: { type: "button" },
-                  on: {
-                    click: function($event) {
-                      return _vm.addMarmitex()
+  return _c("div", { staticClass: "card" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "card-body" }, [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-md-8" }, [
+          _c("label", [_vm._v("Adicionar Marmita")]),
+          _vm._v(" "),
+          _c(
+            "form",
+            {
+              on: {
+                submit: function($event) {
+                  $event.preventDefault()
+                  return _vm.addMarmitex()
+                }
+              }
+            },
+            [
+              _c("div", { staticClass: "input-group" }, [
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.marmita,
+                        expression: "marmita"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { id: "select-marmitex" },
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.marmita = $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      }
                     }
-                  }
-                },
-                [_c("i", { staticClass: "fa fa-plus" })]
-              )
-            ])
-          ])
-        ]),
-        _c("br"),
-        _c("br"),
-        _c("br")
-      ])
+                  },
+                  _vm._l(_vm.marmitexs, function(ms) {
+                    return _c(
+                      "option",
+                      { key: ms.id, domProps: { value: ms } },
+                      [
+                        _vm._v(
+                          _vm._s(ms.nome) +
+                            " - " +
+                            _vm._s(ms.material) +
+                            " - R$ " +
+                            _vm._s(ms.valor_unitario) +
+                            ",00"
+                        )
+                      ]
+                    )
+                  }),
+                  0
+                ),
+                _vm._v(" "),
+                _vm._m(1)
+              ])
+            ]
+          )
+        ])
+      ]),
+      _c("br"),
+      _c("br"),
+      _c("br")
     ])
   ])
 }
@@ -115226,6 +115404,16 @@ var staticRenderFns = [
     return _c("div", { staticClass: "card-header" }, [
       _c("h3", [_vm._v("Dados do Pedido")])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      { staticClass: "btn btn-success", attrs: { type: "submit" } },
+      [_c("i", { staticClass: "fa fa-plus" })]
+    )
   }
 ]
 render._withStripped = true
@@ -115261,8 +115449,33 @@ var render = function() {
             _c(
               "select",
               {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.cliente.id,
+                    expression: "cliente.id"
+                  }
+                ],
                 staticClass: " form-control select-2",
-                attrs: { name: "cliente", id: "select-cliente" }
+                attrs: { name: "cliente", id: "select-cliente" },
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.$set(
+                      _vm.cliente,
+                      "id",
+                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                    )
+                  }
+                }
               },
               [
                 _c("option", { attrs: { value: "0" } }, [
@@ -115351,31 +115564,46 @@ var render = function() {
             _c("div", { staticClass: "form-group" }, [
               _c("label", [_vm._v("Bairro")]),
               _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.cliente.endereco.bairro.nome,
-                    expression: "cliente.endereco.bairro.nome"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text", name: "logradouro" },
-                domProps: { value: _vm.cliente.endereco.bairro.nome },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.cliente.endereco.bairro.id,
+                      expression: "cliente.endereco.bairro.id"
                     }
-                    _vm.$set(
-                      _vm.cliente.endereco.bairro,
-                      "nome",
-                      $event.target.value
-                    )
+                  ],
+                  staticClass: "form-control select-2",
+                  attrs: { id: "select-bairro", name: "bairro" },
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.cliente.endereco.bairro,
+                        "id",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    }
                   }
-                }
-              })
+                },
+                _vm._l(_vm.bairros, function(bairro) {
+                  return _c("option", { domProps: { value: bairro.id } }, [
+                    _vm._v(_vm._s(bairro.nome))
+                  ])
+                }),
+                0
+              )
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
@@ -115455,6 +115683,83 @@ var staticRenderFns = [
     ])
   }
 ]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/PedidoComponent.vue?vue&type=template&id=461d98c6&":
+/*!******************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/PedidoComponent.vue?vue&type=template&id=461d98c6& ***!
+  \******************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "col-md-12" }, [
+    _c(
+      "div",
+      { staticClass: "row" },
+      [
+        _c("pedido-cliente", {
+          attrs: { clientes: _vm.clientes, bairros: _vm.bairros }
+        }),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "col-md-6" },
+          [
+            _c("pedido", {
+              attrs: {
+                clientes: _vm.clientes,
+                carnes: _vm.carnes,
+                cardapios: _vm.cardapios,
+                marmitexs: _vm.marmitexs
+              },
+              on: { setcliente: _vm.setCliente, new: _vm.addMarmita }
+            }),
+            _vm._v(" "),
+            _vm._l(_vm.marmitasOrdenadas, function(marmita, index) {
+              return _c("marmita", {
+                key: index,
+                attrs: {
+                  marmita: marmita,
+                  cardapios: _vm.cardapios,
+                  chave: index,
+                  carnes: _vm.carnes
+                }
+              })
+            })
+          ],
+          2
+        )
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "button",
+      {
+        staticClass: "btn  btn-success",
+        on: {
+          click: function($event) {
+            return _vm.salvarPedido()
+          }
+        }
+      },
+      [_vm._v("Salvar")]
+    )
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -128702,6 +129007,7 @@ Vue.component('example-component', __webpack_require__(/*! ./components/ExampleC
 Vue.component('pedido-cliente', __webpack_require__(/*! ./components/PedidoCliente.vue */ "./resources/js/components/PedidoCliente.vue")["default"]);
 Vue.component('pedido', __webpack_require__(/*! ./components/Pedido.vue */ "./resources/js/components/Pedido.vue")["default"]);
 Vue.component('marmita', __webpack_require__(/*! ./components/Marmita.vue */ "./resources/js/components/Marmita.vue")["default"]);
+Vue.component('pedido-component', __webpack_require__(/*! ./components/PedidoComponent.vue */ "./resources/js/components/PedidoComponent.vue")["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -128709,7 +129015,38 @@ Vue.component('marmita', __webpack_require__(/*! ./components/Marmita.vue */ "./
  */
 
 var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
-  state: {}
+  state: {
+    cliente: {
+      id: '',
+      endereco: {
+        logradouro: '',
+        numero: '',
+        bairro: {
+          id: '',
+          nome: ''
+        },
+        referencia: '',
+        complemento: ''
+      }
+    },
+    marmitas: []
+  },
+  mutations: {
+    addMarmita: function addMarmita(val) {
+      this.state.marmitas.push(val);
+    },
+    setCliente: function setCliente(val) {
+      this.state.cliente = val;
+    }
+  },
+  getters: {
+    cliente: function cliente(state) {
+      return state.cliente;
+    },
+    marmitas: function marmitas(state) {
+      return state.marmitas;
+    }
+  }
 });
 var app = new Vue({
   el: '#app',
@@ -129294,6 +129631,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PedidoCliente_vue_vue_type_template_id_5c804fcc___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PedidoCliente_vue_vue_type_template_id_5c804fcc___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/PedidoComponent.vue":
+/*!*****************************************************!*\
+  !*** ./resources/js/components/PedidoComponent.vue ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _PedidoComponent_vue_vue_type_template_id_461d98c6___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PedidoComponent.vue?vue&type=template&id=461d98c6& */ "./resources/js/components/PedidoComponent.vue?vue&type=template&id=461d98c6&");
+/* harmony import */ var _PedidoComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PedidoComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/PedidoComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _PedidoComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _PedidoComponent_vue_vue_type_template_id_461d98c6___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _PedidoComponent_vue_vue_type_template_id_461d98c6___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/PedidoComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/PedidoComponent.vue?vue&type=script&lang=js&":
+/*!******************************************************************************!*\
+  !*** ./resources/js/components/PedidoComponent.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PedidoComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./PedidoComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/PedidoComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PedidoComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/PedidoComponent.vue?vue&type=template&id=461d98c6&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/components/PedidoComponent.vue?vue&type=template&id=461d98c6& ***!
+  \************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PedidoComponent_vue_vue_type_template_id_461d98c6___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./PedidoComponent.vue?vue&type=template&id=461d98c6& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/PedidoComponent.vue?vue&type=template&id=461d98c6&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PedidoComponent_vue_vue_type_template_id_461d98c6___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PedidoComponent_vue_vue_type_template_id_461d98c6___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

@@ -9,7 +9,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label>Cliente</label>
-                        <select class=" form-control select-2" name="cliente" id="select-cliente">
+                        <select v-model="cliente.id" class=" form-control select-2" name="cliente" id="select-cliente">
                             <option value='0'>Selecione uma Opçao</option>
                             <option v-for='cliente in clientes' :value="cliente.id">
                                 {{cliente.nome}}
@@ -34,7 +34,9 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Bairro</label>
-                            <input type="text" v-model='cliente.endereco.bairro.nome' class="form-control" name="logradouro">
+                            <select id="select-bairro" class="form-control select-2" v-model='cliente.endereco.bairro.id' name="bairro">
+                                <option v-for="bairro in bairros" :value='bairro.id'>{{bairro.nome}}</option>
+                            </select>
                         </div>
 
                         <div class="form-group">
@@ -59,38 +61,56 @@
 
 <script>
     export default {
-        props:{
-            clientes: Array
-        },
+        props:['bairros','clientes'],
         data(){
             return {
                 cliente:{
+                    id:'',
                     endereco:{
-                        bairro:{}
+                        logradouro:'',
+                        numero:'',
+                        bairro:{
+                            id:'',
+                            nome:''
+                        },
+                        referencia:'',
+                        complemento:''
                     }
                 }
             }
         },
-        methods:{
-            setCliente(){
+        watch:{
+            cliente: {
+               handler(val, oldVal){
+                  this.$emit('setcliente',val);
+              },
+              deep: true
+          }
+      },
+      methods:{
+        setCliente(){
 
-                let cliente_id = $('#select-cliente').val();
-                console.log(cliente_id);
-                let cliente = this.clientes.find(item=>item.id == cliente_id);
-                if(!cliente){
-                    this.cliente = {endereco:{bairro:{}}};
-                    return false;
-                }
-                this.cliente = cliente;
+            let cliente_id = $('#select-cliente').val();
+            let cliente = this.clientes.find(item=>item.id == cliente_id);
+            if(!cliente){
+                this.cliente = {endereco:{bairro:{}}};
+                return false;
             }
-        },
-        mounted(){
-            let vm = this;
-            $('#select-cliente').select2({
-                theme:'classic'
-            }).trigger('change').on('change', function () {
-                vm.setCliente()
-            });
+            this.cliente = cliente;
         }
+    },
+    mounted(){
+        let vm = this;
+        $('#select-cliente').select2({
+            theme:'classic'
+        }).trigger('change').on('change', function () {
+            vm.setCliente()
+        });
+    },
+    updated(){
+            $('#select-bairro').select2({
+        theme:'classic'
+    });
     }
+}
 </script>

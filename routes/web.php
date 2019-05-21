@@ -17,7 +17,9 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['prefix'=>'pedidos'],function(){
-
+	Route::get('/impressao',function(){
+		return view('pedidos.impressao');
+	});
 });
 
 Route::group(['prefix'=>'clientes'],function(){

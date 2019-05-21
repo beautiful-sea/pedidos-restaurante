@@ -3,13 +3,13 @@
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
-import Vuex from 'vuex'
+ import Vuex from 'vuex'
 
-require('./bootstrap');
+ require('./bootstrap');
 
-window.Vue = require('vue');
+ window.Vue = require('vue');
 
-Vue.use(Vuex);
+ Vue.use(Vuex);
 
 /**
  * The following block of code may be used to automatically register your
@@ -26,6 +26,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('pedido-cliente', require('./components/PedidoCliente.vue').default);
 Vue.component('pedido', require('./components/Pedido.vue').default);
 Vue.component('marmita', require('./components/Marmita.vue').default);
+Vue.component('pedido-component', require('./components/PedidoComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -33,12 +34,38 @@ Vue.component('marmita', require('./components/Marmita.vue').default);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-const store = new Vuex.Store({
-    state: {
-    }
-});
+ const store = new Vuex.Store({
+ 	state: {
+ 		cliente:{
+ 			id:'',
+ 			endereco:{
+ 				logradouro:'',
+ 				numero:'',
+ 				bairro:{
+ 					id:'',
+ 					nome:''
+ 				},
+ 				referencia:'',
+ 				complemento:''
+ 			}
+ 		},
+ 		marmitas:[]
+ 	},
+ 	mutations:{
+ 		addMarmita(val){
+ 			this.state.marmitas.push(val);
+ 		},
+ 		setCliente(val){
+ 			this.state.cliente = val;
+ 		}
+ 	},
+ 	getters: {
+ 		cliente: state => state.cliente,
+ 		marmitas: state => state.marmitas
+ 	}
+ })
 
-const app = new Vue({
-    el: '#app',
-    store
-});
+ const app = new Vue({
+ 	el: '#app',
+ 	store
+ });

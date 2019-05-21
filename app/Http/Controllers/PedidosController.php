@@ -7,6 +7,7 @@ use App\Clientes;
 use App\Carnes;
 use App\Cardapios;
 use App\Marmitex;
+use App\Bairros;
 use Illuminate\Http\Request;
 
 class PedidosController extends Controller
@@ -28,18 +29,17 @@ class PedidosController extends Controller
      */
     public function create()
     {
-        $pedido = new Pedidos;
         $clientes = Clientes::all();
         $carnes = Carnes::all();
         $marmitex = Marmitex::all();
         $cardapios = Cardapios::all();
-
+        $bairros = Bairros::all();
         return view('pedidos.create',[
-            'pedido'    =>$pedido,
-            'carnes'    =>$carnes,
-            'marmitex'  =>$marmitex,
-            'cardapios'    =>$cardapios,
-            'clientes'  =>$clientes
+            'carnes'    =>$carnes->toArray(),
+            'marmitex'  =>$marmitex->toArray(),
+            'cardapios'    =>$cardapios->toArray(),
+            'clientes'  =>$clientes->toArray(),
+            'bairros'   =>  $bairros->toArray()
         ]);
     }
 
@@ -50,8 +50,10 @@ class PedidosController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+    {   
+
+        return $request->all();
+
     }
 
     /**
