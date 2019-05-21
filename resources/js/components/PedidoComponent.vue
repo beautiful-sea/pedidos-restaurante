@@ -2,10 +2,10 @@
 	<div class="col-md-12">
 		<div class="row">
 
-			<pedido-cliente :clientes='clientes' :bairros='bairros'></pedido-cliente>
+			<pedido-cliente :clientes='clientes' :bairros='bairros' @setcliente="setCliente"></pedido-cliente>
 
 			<div class="col-md-6">
-				<pedido :clientes='clientes' :carnes='carnes' :cardapios='cardapios' :marmitexs='marmitexs' @setcliente="setCliente"  @new="addMarmita"></pedido>
+				<pedido :clientes='clientes' :carnes='carnes' :cardapios='cardapios' :marmitexs='marmitexs'   @new="addMarmita"></pedido>
 
 				<marmita v-for="marmita,index in marmitasOrdenadas" :marmita='marmita' :cardapios='cardapios' :chave="index" :carnes='carnes' :key='index' ></marmita>
 			</div>
@@ -65,6 +65,9 @@
 		watch:{
 			marmitas: function(val){
 				this.$store.commit('addMarmita',val);
+			},
+			cliente: function(val){
+				this.$store.commit('setCliente',val);
 			}
 		},
 		computed: {

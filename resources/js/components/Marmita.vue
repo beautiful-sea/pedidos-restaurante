@@ -12,11 +12,9 @@
 				<div class="card-body">
 					<div class="col-md-12">
 						<label>Cardapio</label>
-						<select class=" form-control select-2 select-cardapio" v-model="selectedCardapio" multiple>
-							<option v-for="c in cardapio" :value="c" >
-								{{c.nome}}
-							</option>
-						</select>
+						<v-select v-model="selectedCardapio"  multiple>
+							<option v-repeat="cardapio in c" :value="c.id"></option>
+						</v-select>
 					</div>
 					<div class="col-md-6" v-if="">
 						<label>Carne</label>
@@ -38,18 +36,42 @@
 		data(){
 			return {
 				cardapio: this.cardapios,
-				selectedCardapio:[]
+				selectedCardapio:[],
+				selectedMarmita: this.marmita
+			}
+		},
+		watch:{
+			selectedMarmita: {
+				handler(val, oldVal){
+				},
+				deep: true
+			},
+			selectedCardapio: {
+				handler(val, oldVal){
+					console.log(val);
+				},
+				deep: true
 			}
 		},
 		methods:{
 			addMarmitex(){
-				this.$emit('new',this.marmita);
+				this.$emit('new',this.selectedMarmita);
+			},
+			addCardapio(){
+				var data = $('.select-cardapio').select2("data");
+				// console.log(this.selectedCardapio);
+				this.selectedMarmita["cardapio"] = this.selectedCardapio;
 			}
 		},
 		mounted(){
+			var vm = this;
 			$('.select-cardapio').select2({
 				theme:'classic'
-			});
+			}).trigger('change')
+			.on('select2:select select2:unselect', function (e) {
+				// vm.addCardapio();
+			})
+
 			$('.select-carnes').select2({
 				theme:'classic'
 			});

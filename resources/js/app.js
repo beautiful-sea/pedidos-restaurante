@@ -4,13 +4,15 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
  import Vuex from 'vuex'
+ import Vue from 'vue'
+ import vSelect from 'vue-select'
 
  require('./bootstrap');
 
  window.Vue = require('vue');
 
  Vue.use(Vuex);
-
+ Vue.component('v-select', vSelect)
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

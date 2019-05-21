@@ -29,7 +29,7 @@
 
 <li class="nav-item">
     <a href="{{ route('pedidos.index') }}" class="nav-link {{ $class }}">
-        <i class="nav-icon fa fa-plus"></i>
+        <i class="nav-icon fa fa-tasks"></i>
         <p>Pedidos</p>
     </a>
 </li>
@@ -108,6 +108,21 @@
             <a href="{{ route('carnes.index') }}" class="nav-link {{ $class }}">
                 <i class="nav-icon fa fa-drumstick-bite"></i>
                 <p>Carnes</p>
+            </a>
+        </li>
+
+        @php
+            $class = '';
+
+            if ($controller == 'MarmitexController') {
+                $class = 'active';
+            }
+        @endphp
+
+        <li class="nav-item">
+            <a href="{{ route('marmitas.index') }}" class="nav-link {{ $class }}">
+                <i class="nav-icon fa fa-plus"></i>
+                <p>Marmitex</p>
             </a>
         </li>
 
